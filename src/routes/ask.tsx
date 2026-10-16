@@ -8,7 +8,7 @@ import { areaIcon } from "@/components/Boardroom";
 import { askBrain, type Analysis } from "@/lib/brain.functions";
 
 export const Route = createFileRoute("/ask")({
-  validateSearch: (s: Record<string, unknown>) => ({ q: typeof s.q === "string" ? s.q : undefined }),
+  validateSearch: (s: Record<string, unknown>): { q?: string } => ({ q: typeof s["q"] === "string" ? (s["q"] as string) : undefined }),
   head: () => ({
     meta: [
       { title: "Ask The Brain — The Rock Brain" },

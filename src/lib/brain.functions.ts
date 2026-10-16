@@ -57,7 +57,7 @@ export const askBrain = createServerFn({ method: "POST" })
     return { question: q };
   })
   .handler(async ({ data }): Promise<Analysis> => {
-    const key = process.env.LOVABLE_API_KEY;
+    const key = process.env["LOVABLE_API_KEY"];
     if (!key) throw new Error("The Brain is not configured.");
     const res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
       method: "POST",
