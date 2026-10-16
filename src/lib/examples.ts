@@ -76,7 +76,7 @@ const EXAMPLES: Record<string, Analysis> = {
     ],
     confidence: "High",
     confidenceReason: "These are proven, low-risk levers that apply to almost every Gibraltar SME.",
-    sources: [commonSources[3], { name: "Gibraltar Finance Centre", note: "General business finance guidance" }],
+    sources: [commonSources[3]!, { name: "Gibraltar Finance Centre", note: "General business finance guidance" }],
   },
   "how could gibraltar treaty developments affect my business?": {
     rocksView:
@@ -106,7 +106,7 @@ const EXAMPLES: Record<string, Analysis> = {
     sources: [
       { name: "HM Government of Gibraltar — Treaty updates", note: "Official statements and briefings" },
       { name: "UK Government (FCDO)", note: "UK–EU negotiation guidance" },
-      commonSources[3],
+      commonSources[3]!,
     ],
   },
 };
