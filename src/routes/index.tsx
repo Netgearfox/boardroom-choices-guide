@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import rock from "@/assets/rock.jpg";
-import { SiteHeader } from "@/components/SiteHeader";
+import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { QuestionBox } from "@/components/QuestionBox";
 import { AREAS } from "@/components/Boardroom";
 
@@ -54,9 +54,7 @@ function Home() {
         </div>
       </section>
 
-      <footer className="border-t border-border py-8 text-center text-xs text-muted-foreground">
-        The Rock Brain provides guidance, not legal or financial advice. Always consult a qualified Gibraltar professional.
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
