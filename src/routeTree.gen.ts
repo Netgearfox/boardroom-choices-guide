@@ -10,11 +10,20 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as AskRouteImport } from './routes/ask'
+import { Route as BoardroomRouteImport } from './routes/boardroom'
+import { Route as IntelligenceRouteImport } from './routes/intelligence'
+import { Route as SavedRouteImport } from './routes/saved'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AskRoute = AskRouteImport.update({
@@ -22,31 +31,69 @@ const AskRoute = AskRouteImport.update({
   path: '/ask',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BoardroomRoute = BoardroomRouteImport.update({
+  id: '/boardroom',
+  path: '/boardroom',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntelligenceRoute = IntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SavedRoute = SavedRouteImport.update({
+  id: '/saved',
+  path: '/saved',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/ask': typeof AskRoute
+  '/boardroom': typeof BoardroomRoute
+  '/intelligence': typeof IntelligenceRoute
+  '/saved': typeof SavedRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/ask': typeof AskRoute
+  '/boardroom': typeof BoardroomRoute
+  '/intelligence': typeof IntelligenceRoute
+  '/saved': typeof SavedRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/ask': typeof AskRoute
+  '/boardroom': typeof BoardroomRoute
+  '/intelligence': typeof IntelligenceRoute
+  '/saved': typeof SavedRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ask'
+  fullPaths: '/' | '/about' | '/ask' | '/boardroom' | '/intelligence' | '/saved'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ask'
-  id: '__root__' | '/' | '/ask'
+  to: '/' | '/about' | '/ask' | '/boardroom' | '/intelligence' | '/saved'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/ask'
+    | '/boardroom'
+    | '/intelligence'
+    | '/saved'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AskRoute: typeof AskRoute
+  BoardroomRoute: typeof BoardroomRoute
+  IntelligenceRoute: typeof IntelligenceRoute
+  SavedRoute: typeof SavedRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +105,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ask': {
       id: '/ask'
       path: '/ask'
@@ -65,12 +119,37 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AskRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/boardroom': {
+      id: '/boardroom'
+      path: '/boardroom'
+      fullPath: '/boardroom'
+      preLoaderRoute: typeof BoardroomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/intelligence': {
+      id: '/intelligence'
+      path: '/intelligence'
+      fullPath: '/intelligence'
+      preLoaderRoute: typeof IntelligenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/saved': {
+      id: '/saved'
+      path: '/saved'
+      fullPath: '/saved'
+      preLoaderRoute: typeof SavedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AskRoute: AskRoute,
+  BoardroomRoute: BoardroomRoute,
+  IntelligenceRoute: IntelligenceRoute,
+  SavedRoute: SavedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

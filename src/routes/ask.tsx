@@ -1,11 +1,10 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMutation } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
-import { MapPin, AlertTriangle, Target, BookOpen, Gauge } from "lucide-react";
-import { SiteHeader } from "@/components/SiteHeader";
+import { useEffect, useState } from "react";
+import { MapPin, AlertTriangle, Target, BookOpen, Gauge, Bookmark, BookmarkCheck } from "lucide-react";
+import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { QuestionBox } from "@/components/QuestionBox";
 import { areaIcon } from "@/components/Boardroom";
-import { askBrain, type Analysis } from "@/lib/brain.functions";
+import { getAnalysis, saveDecision, type Analysis } from "@/lib/examples";
 
 export const Route = createFileRoute("/ask")({
   validateSearch: (s: Record<string, unknown>): { q?: string | undefined } => ({ q: typeof s["q"] === "string" ? (s["q"] as string) : undefined }),
@@ -25,11 +24,16 @@ export const Route = createFileRoute("/ask")({
 function Ask() {
   const { q } = Route.useSearch();
   const navigate = useNavigate({ from: "/ask" });
-  const m = useMutation({ mutationFn: (question: string) => askBrain({ data: { question } }) });
-  const last = useRef<string | undefined>(undefined);
+  const [result, setResult] = useState<Analysis | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    if (q && q !== last.current) { last.current = q; m.mutate(q); }
+    setSaved(false);
+    if (!q) { setResult(null); return; }
+    setBusy(true);
+    const t = setTimeout(() => { setResult(getAnalysis(q)); setBusy(false); }, 1400);
+    return () => clearTimeout(t);
   }, [q]);
 
   return (
@@ -39,15 +43,25 @@ function Ask() {
         <p className="eyebrow">Ask The Brain</p>
         <h1 className="mt-3 font-display text-4xl sm:text-5xl">Put it to the board.</h1>
         <div className="mt-8">
-          <QuestionBox key={q ?? ""} initial={q ?? ""} busy={m.isPending} onSubmit={(v) => { last.current = undefined; navigate({ search: { q: v } }); }} />
+          <QuestionBox key={q ?? ""} initial={q ?? ""} busy={busy} onSubmit={(v) => navigate({ search: { q: v } })} />
         </div>
-
-        {m.isPending && <Thinking />}
-        {m.isError && (
-          <div className="mt-10 rounded-2xl border border-destructive/50 bg-destructive/10 p-6 text-sm">{(m.error as Error).message}</div>
+        {busy && <Thinking />}
+        {result && !busy && q && (
+          <>
+            <div className="mt-10 flex justify-end">
+              <button
+                onClick={() => { saveDecision({ id: crypto.randomUUID(), question: q, date: new Date().toISOString().slice(0, 10), confidence: result.confidence }); setSaved(true); }}
+                className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-semibold hover:border-primary"
+              >
+                {saved ? <BookmarkCheck className="h-4 w-4 text-primary" /> : <Bookmark className="h-4 w-4" />}
+                {saved ? "Saved to decisions" : "Save decision"}
+              </button>
+            </div>
+            <Result a={result} question={q} />
+          </>
         )}
-        {m.data && !m.isPending && <Result a={m.data} question={q ?? ""} />}
       </main>
+      <SiteFooter />
     </div>
   );
 }
